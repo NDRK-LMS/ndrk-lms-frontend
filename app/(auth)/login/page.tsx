@@ -11,6 +11,7 @@ import { useAuthStore } from "@/lib/auth-store";
 import { AccountTypeSelector, type AccountType } from "@/components/auth/account-type-selector";
 import { loginSchema, UserRole } from "@ndrk/shared";
 
+
 const API_BASE = "http://localhost:3001";
 
 export default function LoginPage() {
@@ -152,7 +153,7 @@ export default function LoginPage() {
         <CardFooter className="flex flex-col items-start gap-1">
           <span>
             New here?{" "}
-            <Link href="/(auth)/register" className="text-blue-600 hover:underline">
+            <Link href="/register" className="text-blue-600 hover:underline">
               Create an account
             </Link>
           </span>
