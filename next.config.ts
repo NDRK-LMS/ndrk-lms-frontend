@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Ensure local shared package is bundled correctly
+  transpilePackages: ["@ndrk/shared"],
 };
 
 export default nextConfig;

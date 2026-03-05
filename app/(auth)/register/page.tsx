@@ -133,7 +133,7 @@ export default function RegisterPage() {
         <CardFooter className="flex flex-col items-start gap-1">
           <span>
             Already have an account?{" "}
-            <Link href="/(auth)/login" className="text-blue-600 hover:underline">
+            <Link href="/login" className="text-blue-600 hover:underline">
               Sign in
             </Link>
           </span>

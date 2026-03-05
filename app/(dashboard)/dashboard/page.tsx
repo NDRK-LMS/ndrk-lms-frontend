@@ -25,22 +25,19 @@ export default function DashboardPage() {
     user?.role === UserRole.SUPER_ADMIN || user?.role === UserRole.PROGRAMME_ADMIN;
 
   useEffect(() => {
-    if (!user || !accessToken) {
-      router.replace("/login");
+    if (!user || !accessToken || !isAdmin) {
       return;
     }
 
-    if (isAdmin) {
-      fetch("http://localhost:3001/api/v1/admin/dashboard", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((r) => r.json())
-        .then((d) => setAdminData(d))
-        .catch(() => setAdminData(null));
-    }
-  }, [user, accessToken, isAdmin, router]);
+    fetch("http://localhost:3001/api/v1/admin/dashboard", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((r) => r.json())
+      .then((d) => setAdminData(d))
+      .catch(() => setAdminData(null));
+  }, [user, accessToken, isAdmin]);
 
   if (!user) {
     return null;
@@ -75,19 +72,19 @@ export default function DashboardPage() {
             <div className="rounded-lg border bg-white p-4 shadow-sm">
               <div className="text-sm text-gray-500">Total users</div>
               <div className="mt-2 text-2xl font-semibold">
-                {adminData?.summary.users ?? "—"}
+                {adminData?.summary?.users ?? "—"}
               </div>
             </div>
             <div className="rounded-lg border bg-white p-4 shadow-sm">
               <div className="text-sm text-gray-500">Programmes</div>
               <div className="mt-2 text-2xl font-semibold">
-                {adminData?.summary.programmes ?? "—"}
+                {adminData?.summary?.programmes ?? "—"}
               </div>
             </div>
             <div className="rounded-lg border bg-white p-4 shadow-sm">
               <div className="text-sm text-gray-500">Batches</div>
               <div className="mt-2 text-2xl font-semibold">
-                {adminData?.summary.batches ?? "—"}
+                {adminData?.summary?.batches ?? "—"}
               </div>
             </div>
           </div>
