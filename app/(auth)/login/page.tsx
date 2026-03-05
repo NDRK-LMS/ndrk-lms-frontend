@@ -11,6 +11,7 @@ import { useAuthStore } from "@/lib/auth-store";
 import { AccountTypeSelector, type AccountType } from "@/components/auth/account-type-selector";
 import { loginSchema, UserRole } from "@ndrk/shared";
 
+
 const API_BASE = "http://localhost:3001";
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
