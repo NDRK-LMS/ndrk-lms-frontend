@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // images: {
-  //   domains: ["localhost", "127.0.0.1"],
-  // },
+  // Ensure local shared package is bundled correctly
+  transpilePackages: ["@ndrk/shared"],
 };
 
 export default nextConfig;
