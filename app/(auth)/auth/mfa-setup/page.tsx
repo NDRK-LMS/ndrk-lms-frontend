@@ -60,7 +60,8 @@ export default function MfaSetupPage() {
         message: data.message,
       });
 
-      router.push("/dashboard");
+      // MFA is for admin roles → redirect to admin dashboard
+      router.push("/admin/dashboard");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -108,4 +109,3 @@ export default function MfaSetupPage() {
     </div>
   );
 }
-

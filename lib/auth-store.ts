@@ -1,7 +1,7 @@
 'use client';
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 type AuthUser = {
   id: string;
@@ -17,6 +17,7 @@ type AuthState = {
   accessToken: string | null;
   refreshToken: string | null;
   message: string | null;
+  hydrated: boolean;
   setAuth: (data: {
     user: AuthUser;
     accessToken: string;
@@ -24,6 +25,7 @@ type AuthState = {
     message?: string;
   }) => void;
   clearAuth: () => void;
+  clearWelcomeMessage: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -33,6 +35,7 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       message: null,
+      hydrated: false,
       setAuth: (data) =>
         set({
           user: data.user,
@@ -47,10 +50,17 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
           message: null,
         }),
+      clearWelcomeMessage: () => set({ message: null }),
     }),
     {
-      name: "ndrk-auth",
-    }
-  )
+      name: 'ndrk-auth',
+      // This runs after state is restored from localStorage
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // we can call set on the store via the `state` arg in persist v5
+          (state as any).hydrated = true;
+        }
+      },
+    },
+  ),
 );
-

@@ -24,7 +24,7 @@ type MeResponse = {
   notificationPrefs?: Record<string, unknown> | null;
 };
 
-export default function SettingsPage() {
+export default function AdminSettingsPage() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const accessToken = useAuthStore((s) => s.accessToken);
@@ -115,15 +115,22 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-56px)] justify-center bg-slate-50 px-4 py-8">
-      <Card className="w-full max-w-2xl">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+        <p className="text-gray-500">
+          Manage your profile, contact details, and notification preferences.
+        </p>
+      </div>
+
+      <Card className="max-w-2xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Profile settings
+            Profile & account
           </CardTitle>
           <CardDescription>
-            Manage your personal details and notification preferences.
+            Update your personal information. Email and role are read-only.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -140,10 +147,17 @@ export default function SettingsPage() {
                     <Mail className="h-4 w-4" />
                     Email
                   </Label>
-                  <Input id="email" value={user.email} disabled className="bg-gray-50" />
+                  <Input
+                    id="email"
+                    value={user.email}
+                    disabled
+                    className="bg-gray-50"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role" className="text-gray-700">Role</Label>
+                  <Label htmlFor="role" className="flex items-center gap-2 text-gray-700">
+                    Role
+                  </Label>
                   <Input
                     id="role"
                     value={user.role.replace('_', ' ')}
@@ -190,6 +204,9 @@ export default function SettingsPage() {
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   placeholder="https://example.com/photo.jpg"
                 />
+                <p className="text-xs text-gray-500">
+                  Enter a direct image URL. Used in the header and user lists.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -229,7 +246,9 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && (
+                <p className="text-sm text-red-600">{error}</p>
+              )}
               {success && !error && (
                 <p className="text-sm text-green-700">{success}</p>
               )}

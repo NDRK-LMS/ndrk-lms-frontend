@@ -39,9 +39,9 @@ export default function LoginPage() {
       }
 
       if (data.mfaEnabled) {
-        router.push(`/mfa-challenge?temp=${encodeURIComponent(data.tempToken)}`);
+        router.push(`/auth/mfa-challenge?temp=${encodeURIComponent(data.tempToken)}`);
       } else {
-        router.push(`/mfa-setup?temp=${encodeURIComponent(data.tempToken)}`);
+        router.push(`/auth/mfa-setup?temp=${encodeURIComponent(data.tempToken)}`);
       }
       return;
     }
@@ -65,7 +65,12 @@ export default function LoginPage() {
       message: data.message,
     });
 
-    router.push("/dashboard");
+    // Spec: redirect to /admin or / based on role
+    if (isAdminUser) {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/");
+    }
   }
 
   async function handleGoogleCredential(credential: string) {
@@ -271,4 +276,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
