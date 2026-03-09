@@ -2,16 +2,22 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const [open, setOpen] = React.useState(false);
+
+  // Admin layout has its own header; avoid duplicate
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   function handleLogout() {
     clearAuth();
@@ -75,7 +81,7 @@ export function Header() {
         </div>
       ) : (
         <div className="flex items-center gap-3 text-sm">
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link href="/auth/login" className="text-blue-600 hover:underline">
             Sign in
           </Link>
           <Link href="/register" className="text-blue-600 hover:underline">

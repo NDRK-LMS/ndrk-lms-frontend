@@ -64,7 +64,10 @@ export default function RegisterPage() {
         message: data.message,
       });
 
-      router.push("/dashboard"); // redirect after signup
+      const isAdmin =
+        data.user?.role === UserRole.SUPER_ADMIN ||
+        data.user?.role === UserRole.PROGRAMME_ADMIN;
+      router.push(isAdmin ? "/admin/dashboard" : "/");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -133,7 +136,7 @@ export default function RegisterPage() {
         <CardFooter className="flex flex-col items-start gap-1">
           <span>
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 hover:underline">
+            <Link href="/auth/login" className="text-blue-600 hover:underline">
               Sign in
             </Link>
           </span>
