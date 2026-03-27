@@ -11,6 +11,14 @@ import { useAuthStore } from "@/lib/auth-store";
 const API_BASE = "http://localhost:3001";
 
 export default function MfaSetupPage() {
+  return (
+    <React.Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
+      <MfaSetupContent />
+    </React.Suspense>
+  );
+}
+
+function MfaSetupContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
