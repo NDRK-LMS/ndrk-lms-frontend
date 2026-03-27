@@ -26,11 +26,27 @@ type AuthState = {
   }) => void;
   clearAuth: () => void;
   clearWelcomeMessage: () => void;
+  isAccessTokenExpired: () => boolean;
 };
+
+/**
+ * Decode JWT payload without a library.
+ * Returns the parsed payload or null if invalid.
+ */
+function decodeJwtPayload(token: string): { exp?: number } | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       accessToken: null,
       refreshToken: null,
@@ -51,13 +67,19 @@ export const useAuthStore = create<AuthState>()(
           message: null,
         }),
       clearWelcomeMessage: () => set({ message: null }),
+      isAccessTokenExpired: () => {
+        const token = get().accessToken;
+        if (!token) return true;
+        const payload = decodeJwtPayload(token);
+        if (!payload?.exp) return true;
+        // Expired if less than 30 seconds remaining (buffer)
+        return payload.exp * 1000 < Date.now() + 30_000;
+      },
     }),
     {
       name: 'ndrk-auth',
-      // This runs after state is restored from localStorage
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // we can call set on the store via the `state` arg in persist v5
           (state as any).hydrated = true;
         }
       },
