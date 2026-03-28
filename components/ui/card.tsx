@@ -7,7 +7,7 @@ export const Card = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "w-full max-w-md rounded-xl border border-gray-200 bg-white/80 p-6 shadow-md backdrop-blur",
+      "w-full rounded-lg border border-gray-200 bg-white/80 shadow-sm p-4",
       className
     )}
     {...props}
