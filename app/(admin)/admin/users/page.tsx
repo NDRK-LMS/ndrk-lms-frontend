@@ -107,7 +107,7 @@ export default function AdminUsersPage() {
   const importFileRef = useRef<HTMLInputElement>(null);
 
   const [search, setSearch] = useState('');
-  const [searchInput, setSearchInput] = useState(''); // local value for controlled input; sync to search on Enter or debounce
+  const [searchInput, setSearchInput] = useState(''); 
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [page, setPage] = useState(1);
@@ -156,11 +156,20 @@ export default function AdminUsersPage() {
       params.set('sortBy', 'createdAt');
       params.set('sortOrder', 'desc');
 
-      const list = await api.get<UsersResponse>(
+      const list = await api.get<{ users: Record<string, unknown>[]; totalPages: number; total: number }>(
         `/api/v1/admin/users?${params.toString()}`,
         accessToken
       );
-      setUsers(list.users);
+      setUsers(list.users.map((u: Record<string, unknown>) => ({
+        id: u.id as string,
+        email: u.email as string,
+        fullName: (u.full_name ?? u.fullName ?? '') as string,
+        role: u.role as string,
+        status: u.status as string,
+        lastLoginAt: (u.last_login_at ?? u.lastLoginAt ?? null) as string | null,
+        createdAt: (u.created_at ?? u.createdAt ?? '') as string,
+        avatarUrl: (u.avatar_url ?? u.avatarUrl ?? null) as string | null,
+      })));
       setTotalPages(list.totalPages || 1);
       setTotalCount(list.total);
     } catch (e: unknown) {
